@@ -5,8 +5,9 @@
     "tasks": [
         {
             "label": "run",
-            "type": "process",
-            "command": "gradlew run"
+            "type": "shell",
+            "command": "gradlew run",
+            "problemMatcher": []
         },
         {
             "label": "build",
