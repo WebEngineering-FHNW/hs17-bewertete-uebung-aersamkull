@@ -38,8 +38,10 @@ Technical notes:
  
 ## Project confirmation
 
-< to be filled by lecturer>
+Confirmed.
 
+Usage of both Knockout and TypeScript ok.
+Go for it!
 
 ## Project delivery <to be filled by student>
 
