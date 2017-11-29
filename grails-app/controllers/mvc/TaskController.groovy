@@ -5,21 +5,26 @@ import java.time.format.DateTimeFormatter
 
 class TaskController {
 
-    def tasklist(String fromDate, String toDate) {
+    def tasklist(String fromDate, String toDate, Boolean ownOnly) {
         def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        
-
-        LocalDate fromDateDt = LocalDate.parse(fromDate, fmt) 
-        LocalDate toDateDt = LocalDate.parse(toDate, fmt) 
+        if(ownOnly == null) {
+			ownOnly = false
+		}
+        LocalDate fromDateDt = fromDate == null ? LocalDate.now().plusDays(10) : LocalDate.parse(fromDate, fmt) 
+        LocalDate toDateDt = toDate == null ?LocalDate.now().plusMonths(1) : LocalDate.parse(toDate, fmt) 
         
 		List<TaskBase> allTasks = TaskBase.where {
 			(type == TaskBase.TYPE_SINGLE && (it as TaskSingle).date >= fromDateDt && (it as TaskSingle).date <= toDateDt) ||
 			(type == TaskBase.TYPE_MASTER && (it as TaskMaster).rrule.start <= toDateDt && ((it as TaskMaster).rrule.until == null || (it as TaskMaster).rrule.until >= fromDate))
 		}.list()
-		List<TaskBase> singleTasks = allTasks.findAll { it.type == TaskBase.TYPE_SINGLE }
-		List<TaskBase> occurences = allTasks.findAll { it.type == TaskBase.TYPE_MASTER }.collectMany { TaskEnumerator.getOccurences(it, fromDateDt, toDateDt) }
-		singleTasks.addAll(occurences)
-		render view: "tasklist", model: [tasks: singleTasks]
+		List<TaskSingle> allSingleTasks = allTasks.findAll { it.type == TaskBase.TYPE_SINGLE }
+		List<TaskSingle> occurences = allTasks.findAll { it.type == TaskBase.TYPE_MASTER }.collectMany { TaskEnumerator.getOccurences(it, fromDateDt, toDateDt) }
+		allSingleTasks.addAll(occurences)
+        if(ownOnly == true) {
+			String ofUser = request.cookies.find{ 'Username' == it.name }?.value
+            allSingleTasks.removeIf{ it.responsible.name != ofUser  }
+        }
+		render view: "tasklist", model: [tasks: allSingleTasks, fromDate: fromDateDt, toDate: toDateDt]
 	}
 }
 

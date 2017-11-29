@@ -18,14 +18,16 @@
         <a class="navbar-brand" href="/#">
             <i class="fa grails-icon">
                  <asset:image src="grails-cupsonly-logo-white.svg"/>
-            </i> Grails
+            </i> Simple Task
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                        <g:pageProperty name="page.nav" />
+                        <li class="nav-item active">
+                            <g:link controller="task" class="nav-link" >Home</g:link>
+                       </li>
                 </ul>
         </div>
     </nav>

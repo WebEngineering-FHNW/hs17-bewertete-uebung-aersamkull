@@ -14,3 +14,10 @@
 .grails-icon > img {
     height: 20px;
 }
+
+.logincard {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}

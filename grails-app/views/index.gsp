@@ -6,40 +6,6 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 <body>
-    <content tag="nav">
-        <li class="nav-item dropdown">
-            <a id="grailsEnvLink" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Application Status</a>
-            <div class="dropdown-menu" aria-labelledby="grailsEnvLink">
-                <a class="dropdown-item" href="#">Environment: ${grails.util.Environment.current.name}</a>
-                <a class="dropdown-item" href="#">App profile: ${grailsApplication.config.grails?.profile}</a>
-                <a class="dropdown-item" href="#">App version:
-                    <g:meta name="info.app.version"/></a>
-                
-               <a class="dropdown-item" href="#">Grails version:
-                    <g:meta name="info.app.grailsVersion"/></a>
-                <a class="dropdown-item" href="#">Groovy version: ${GroovySystem.getVersion()}</a>
-                <a class="dropdown-item" href="#">JVM version: ${System.getProperty('java.version')}</a>
-                <a class="dropdown-item" href="#">Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Artefacts </a>
-            <ul class="dropdown-menu">
-                <a class="dropdown-item" href="#">Controllers: ${grailsApplication.controllerClasses.size()}</a>
-                <a class="dropdown-item" href="#">Domains: ${grailsApplication.domainClasses.size()}</a>
-                <a class="dropdown-item" href="#">Services: ${grailsApplication.serviceClasses.size()}</a>
-                <a class="dropdown-item" href="#">Tag Libraries: ${grailsApplication.tagLibClasses.size()}</a>
-            </ul>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">Installed Plugins</a>
-            <ul class="dropdown-menu">
-                <g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-                    <a class="dropdown-item" href="#">${plugin.name} - ${plugin.version}</a>
-                </g:each>
-            </ul>
-        </li>
-    </content>
 
     <div id="content" role="main">
         <section>
