@@ -19,7 +19,7 @@ class TaskController {
 		List<TaskBase> singleTasks = allTasks.findAll { it.type == TaskBase.TYPE_SINGLE }
 		List<TaskBase> occurences = allTasks.findAll { it.type == TaskBase.TYPE_MASTER }.collectMany { TaskEnumerator.getOccurences(it, fromDateDt, toDateDt) }
 		singleTasks.addAll(occurences)
-		render model: [tasks: singleTasks]
+		render view: "tasklist", model: [tasks: singleTasks]
 	}
 }
 

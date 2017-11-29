@@ -13,4 +13,8 @@ class TaskSingle extends TaskBase {
 
     static constraints = {
     }
+
+    String toString() {
+		"$name at $date ($type)"
+	}
 }
