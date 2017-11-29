@@ -2,34 +2,62 @@ package mvc
 
 import java.time.LocalDate
 
+/**
+ * A class representing a "master" that will yield multiple occurences
+ */
 class TaskMaster extends TaskBase {
 	
+	// Loosely oriented on iCalendar(https://lists.oasis-open.org/archives/obix-xml/200708/msg00001.html)
+	Rrule rrule;
+	
+	
+	static hasMany = [responsibles: User, deletedOccurences: DeletedTask]
+	static mappedBy = [responsibles: "taskMaster"]
+
+	static embedded = ["rrule"]	
+	
+	static constraints = {
+		rrule (nullable: false)
+	}
+	
+}
+
+/**
+ * A class that represents the repetition rule
+ */
+class Rrule {
+	String freq
+	Integer count
+	LocalDate start
+	LocalDate until
+	int interval
+
+
 	static final String FreqDaily = "DAILY"
 	static final String FreqWeekly = "WEEKLY"
 	static final String FreqMonthly = "MONTHLY"
 	static final String FreqYearly = "YEARLY" 
 	
-	// Loosely oriented on iCalendar(https://lists.oasis-open.org/archives/obix-xml/200708/msg00001.html)
-	String rrule_freq
-	Integer rrule_count
-	LocalDate rrule_until
-	int rrule_interval
-	
-	
-	static hasMany = [responsibles: User]
-	static mappedBy = [responsibles: "taskMaster"]
-		
-	
-	
     static constraints = {
-		rrule_freq inList: [FreqDaily, FreqWeekly, FreqMonthly, FreqYearly]
-		rrule_count(validator: {val, obj->
-			if(val && obj.rrule_until) {
-				return 'taskmaster.until_or_count'
+		freq inList: [FreqDaily, FreqWeekly, FreqMonthly, FreqYearly]
+		count(validator: {val, obj->
+			if(val && obj.until) {
+				return 'taskfreq.until_or_count'
 			}
 		})
-		rrule_interval (min: 1)
+		interval (min: 1)
+		until (nullable: true)
 	}
-	
-	
+
+	String toString() {
+		def endStr = (count != null ? "COUNT=$count;": (until != null ? "UNTIL=$until;" : ""))
+		"FREQ=$freq;INTERVAL=$interval" + endStr + "START=$start;"
+	}
+}
+
+/** 
+ * Actually a wrapper around the LocalDate object
+ */
+class DeletedTask {
+	LocalDate date;
 }

@@ -1,5 +1,8 @@
 package mvc
 
+/** 
+ * A user
+ */
 class User {
 
 	String name;
