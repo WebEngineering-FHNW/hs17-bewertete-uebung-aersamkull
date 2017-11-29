@@ -10,16 +10,22 @@ class TaskMaster extends TaskBase {
 	// Loosely oriented on iCalendar(https://lists.oasis-open.org/archives/obix-xml/200708/msg00001.html)
 	Rrule rrule;
 	
-	
-	static hasMany = [responsibles: User, deletedOccurences: DeletedTask]
-	static mappedBy = [responsibles: "taskMaster"]
+	List<User> responsibles
+	static hasMany = [responsibles: User, deletedOccurences: DeletedTask, exceptions: TaskOccurenceException]
+	static mappedBy = [responsibles: "taskMaster", exceptions: "master"]
 
 	static embedded = ["rrule"]	
 	
 	static constraints = {
 		rrule (nullable: false)
+		type inList: [TaskBase.TYPE_MASTER]
+		responsibles (minSize: 1)
 	}
 	
+	TaskMaster() {
+		type = TaskBase.TYPE_MASTER
+		
+	}
 }
 
 /**
@@ -44,7 +50,7 @@ class Rrule {
 			if(val && obj.until) {
 				return 'taskfreq.until_or_count'
 			}
-		})
+		}, nullable: true)
 		interval (min: 1)
 		until (nullable: true)
 	}
@@ -53,6 +59,10 @@ class Rrule {
 		def endStr = (count != null ? "COUNT=$count;": (until != null ? "UNTIL=$until;" : ""))
 		"FREQ=$freq;INTERVAL=$interval" + endStr + "START=$start;"
 	}
+	
+	static mapping = {
+		interval defaultValue: "1"
+	 }
 }
 
 /** 
