@@ -6,7 +6,6 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 <body>
-
     <div id="content" role="main">
         <section>
             <h1>Welcome to Grails</h1>

@@ -9,7 +9,7 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-        "/"(view:"/index")
+        "/"(controller:"task", action: "tasklist")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

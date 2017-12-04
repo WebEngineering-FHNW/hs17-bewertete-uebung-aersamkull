@@ -11,6 +11,9 @@
 *= require_self
 */
 
+.content {
+    padding: 20px;
+}
 .grails-icon > img {
     height: 20px;
 }
@@ -21,3 +24,27 @@
     margin-right: auto;
     margin-top: 20px;
 }
+
+
+.tasklist {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.taskItem {
+    display: inline-block;
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 3px;
+}
+.taskItem input:read-only {
+    border: 0px none white;
+    border-radius: 0.25rem;
+    background-color: transparent;
+}
+.taskItem .taskButtons {
+    float: right;
+}
+

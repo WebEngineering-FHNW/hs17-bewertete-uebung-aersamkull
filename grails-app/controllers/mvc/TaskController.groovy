@@ -2,17 +2,46 @@ package mvc
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import groovy.json.JsonOutput
 
 class TaskController {
 
+	def index(){
+		return tasklist( null, null, null)
+	} 
+	def edit(int id) {
+		render view: "taskedit", model : [task: TaskBase.read(id), newTask: true ]
+	}
+	
+	def taskdata(int id) {
+		def data = TaskBase.read(id)
+		
+		render JsonOutput.toJson([id: data.id, name: data.name, type: data.type, rrule: data.rrule?.toString()])
+	}
+	
+	def "new"() {
+		render view: "taskedit", model : [task: new TaskSingle(), newTask: false ]
+	}
+	
     def tasklist(String fromDate, String toDate, Boolean ownOnly) {
+		String loggedInUser = request.cookies.find{ 'Username' == it.name }?.value
+		if(loggedInUser == null) {
+			return redirect(controller: "user", action: "index")
+		}
         def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         if(ownOnly == null) {
 			ownOnly = false
 		}
         LocalDate fromDateDt = fromDate == null ? LocalDate.now().plusDays(10) : LocalDate.parse(fromDate, fmt) 
         LocalDate toDateDt = toDate == null ?LocalDate.now().plusMonths(1) : LocalDate.parse(toDate, fmt) 
-        
+        def allSingleTasks = TaskEnumerator.getTasks(fromDateDt, toDateDt, ownOnly ? loggedInUser: null);
+		render view: "tasklist", model: [tasks: allSingleTasks, fromDate: fromDateDt, toDate: toDateDt]
+	}
+}
+
+class TaskEnumerator {
+	public static List<TaskSingle> getTasks(LocalDate fromDateDt, LocalDate toDateDt, String userFilter) {
+		
 		List<TaskBase> allTasks = TaskBase.where {
 			(type == TaskBase.TYPE_SINGLE && (it as TaskSingle).date >= fromDateDt && (it as TaskSingle).date <= toDateDt) ||
 			(type == TaskBase.TYPE_MASTER && (it as TaskMaster).rrule.start <= toDateDt && ((it as TaskMaster).rrule.until == null || (it as TaskMaster).rrule.until >= fromDate))
@@ -20,16 +49,11 @@ class TaskController {
 		List<TaskSingle> allSingleTasks = allTasks.findAll { it.type == TaskBase.TYPE_SINGLE }
 		List<TaskSingle> occurences = allTasks.findAll { it.type == TaskBase.TYPE_MASTER }.collectMany { TaskEnumerator.getOccurences(it, fromDateDt, toDateDt) }
 		allSingleTasks.addAll(occurences)
-        if(ownOnly == true) {
-			String ofUser = request.cookies.find{ 'Username' == it.name }?.value
-            allSingleTasks.removeIf{ it.responsible.name != ofUser  }
-        }
-		render view: "tasklist", model: [tasks: allSingleTasks, fromDate: fromDateDt, toDate: toDateDt]
+		if(userFilter != null) {
+			allSingleTasks.removeIf{ it.responsible.name != userFilter  }
+		}
+		return allSingleTasks
 	}
-}
-
-class TaskEnumerator {
-	
 	public static List<TaskOccurenceException> getOccurences(TaskMaster tm, LocalDate fromDate, LocalDate toDate) {
 		if(tm.rrule.start > toDate) {
 			return [];
@@ -79,7 +103,7 @@ class TaskEnumerator {
 			return date1.plusMonths(interval);
 		}
 		else if(freq == Rrule.FreqWeekly) {
-			return date1.plusMonths(interval);
+			return date1.plusWeeks(interval);
 		}
 		else if(freq == Rrule.FreqYearly) {
 			return date1.plusYears(interval);

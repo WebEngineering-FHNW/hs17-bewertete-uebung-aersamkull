@@ -27,7 +27,7 @@ class UserController {
 	def logout() {
 		Cookie cook = request.cookies.find{ 'Username' == it.name }
 		cook.maxAge = 0
-		response.removeCookie(cook)
+		//response.removeCookie(cook)
 		
 		render "Logged out!"
 	}

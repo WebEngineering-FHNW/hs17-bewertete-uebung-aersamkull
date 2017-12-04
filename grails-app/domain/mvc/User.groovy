@@ -6,7 +6,8 @@ package mvc
 class User {
 
 	String name;
-	
+	@JsonIgnore
+	List<TaskMaster> taskMaster;
 	
 	static hasMany = [taskMaster: TaskMaster]
 	static mappedBy = [taskMaster: "responsibles"]

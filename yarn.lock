@@ -6,6 +6,16 @@
   version "3.2.16"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.16.tgz#04419c404a3194350e7d3f339a90e72c88db3111"
 
+"@types/knockout@^3.4.47":
+  version "3.4.47"
+  resolved "https://registry.yarnpkg.com/@types/knockout/-/knockout-3.4.47.tgz#e312370bd9688f373e4c8ace40a3317c88089ac6"
+
+"@types/popper.js@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@types/popper.js/-/popper.js-1.11.0.tgz#217a9231953ded26b15a6264f9942e963a8f6e69"
+  dependencies:
+    popper.js "*"
+
 bootstrap@4.0.0-beta.2:
   version "4.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
@@ -13,6 +23,14 @@ bootstrap@4.0.0-beta.2:
 jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
+knockout@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/knockout/-/knockout-3.4.2.tgz#e87958de77ad1e936f7ce645bab8b5d7c456d937"
+
+popper.js@*, popper.js@^1.12.9:
+  version "1.12.9"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
 
 typescript@^2.6.1:
   version "2.6.1"

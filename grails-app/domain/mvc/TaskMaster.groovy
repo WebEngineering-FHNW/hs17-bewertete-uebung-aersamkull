@@ -57,7 +57,7 @@ class Rrule {
 
 	String toString() {
 		def endStr = (count != null ? "COUNT=$count;": (until != null ? "UNTIL=$until;" : ""))
-		"FREQ=$freq;INTERVAL=$interval" + endStr + "START=$start;"
+		"FREQ=$freq;INTERVAL=$interval;" + endStr + "START=$start;"
 	}
 	
 	static mapping = {
