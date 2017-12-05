@@ -1,8 +1,10 @@
+//= require lib/knockout
+//= require utils
 var FormValidationViewModel = /** @class */ (function () {
     function FormValidationViewModel(element) {
         var _this = this;
-        this.fromDate = ko.observable($("name=fromDate", element).val());
-        this.toDate = ko.observable($("name=toDate", element).val());
+        this.fromDate = ko.observable($("[name=fromDate]", element).val());
+        this.toDate = ko.observable($("[name=toDate]", element).val());
         this.isValid = ko.computed((function () {
             if (!_this.fromDate())
                 return false;

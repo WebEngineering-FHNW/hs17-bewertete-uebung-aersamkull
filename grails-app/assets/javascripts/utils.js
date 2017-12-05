@@ -1,3 +1,4 @@
+//= require lib/knockout
 var Tasker;
 (function (Tasker) {
     function applyViewModel(viewModelFactory, elementId) {

@@ -41,6 +41,9 @@
 </g:each>
 </ul>
   
-<asset:javascript src="tasklist.js"/>
 </body>
 </html>
+<content tag="js">
+
+  <asset:javascript src="tasklist.js" />
+</content>

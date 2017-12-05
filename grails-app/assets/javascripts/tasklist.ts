@@ -8,8 +8,8 @@ class FormValidationViewModel {
     isValid: KnockoutComputed<boolean>;
 
     constructor(element: HTMLElement){
-        this.fromDate = ko.observable(<string>$("name=fromDate", element).val());
-        this.toDate = ko.observable(<string>$("name=toDate", element).val());
+        this.fromDate = ko.observable(<string>$("[name=fromDate]", element).val());
+        this.toDate = ko.observable(<string>$("[name=toDate]", element).val());
 
         this.isValid = ko.computed((()=>{
             if(!this.fromDate())
