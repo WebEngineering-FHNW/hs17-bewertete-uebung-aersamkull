@@ -15,7 +15,7 @@ namespace Tasker {
         responsibles = ko.observableArray<number>();
         taskDate = ko.observable<string>();
 
-        taskType : string;
+        taskType = ko.observable("new");
 
         repetitionStart = ko.observable(new Date().toJSON());
         repetitionUntil = ko.observable(new Date().toJSON());
@@ -43,14 +43,33 @@ namespace Tasker {
             this.load(taskId, masterId, date);
         }
 
+        /** Loads the data for the task.
+         * Currently, this is called once only, but later this could be called multiple times 
+         * (eg, if used in a SPA App)
+         */
         load(id: number|undefined, masterid: number|undefined, date: string|undefined) {
+            if(!id && !masterid) {
+                // It's a new task!
+                // Reset everything to default
+                this.taskType("new");
+                this.responsibles([]);
+                this.responsible(null);
+                this.name("");
+                this.description("");
+                this.repetionValue("");
+                this.repetitionInterval(1);
+                this.repetitionStart(new Date().toJSON());
+                this.repetitionUntil(null);
+                this.taskDate(new Date().toJSON());
+                return;
+            }
             this.isLoading(true);
             $.getJSON(`/task/taskdata?id=${(id||0).toString()}&masterid=${masterid||0}&date=${date||""}`)
                 .then(res=>{
                     this.isLoading(false);
                     this.description(res.description);
                     this.name(res.name);
-                    this.taskType = res.type;
+                    this.taskType(res.type);
                     const rruleData = res.rrule ? (<string>res.rrule).split(';')
                         .map(s=>s.split('='))
                         .reduce((p, c)=> {
@@ -94,6 +113,7 @@ namespace Tasker {
         }
 
         save(dt: never, evt: Event) {
+            
             if(!this.name()) {
                 this.errorMessage("Please provide a name");
                 return false;
@@ -111,6 +131,11 @@ namespace Tasker {
                 return false;
             }
             this.errorMessage('');
+            
+            // If it occurs multiple times, this will be a "Master", else it's a single
+            if (this.taskType()==='new') {
+                this.taskType(this.repetionValue() ? "MASTER": "SINGLE"); 
+            }
             return true;
         }
     }

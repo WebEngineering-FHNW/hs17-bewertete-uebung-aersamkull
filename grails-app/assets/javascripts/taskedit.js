@@ -12,6 +12,7 @@ var Tasker;
             this.responsible = ko.observable();
             this.responsibles = ko.observableArray();
             this.taskDate = ko.observable();
+            this.taskType = ko.observable("new");
             this.repetitionStart = ko.observable(new Date().toJSON());
             this.repetitionUntil = ko.observable(new Date().toJSON());
             this.repetitionInterval = ko.observable(1);
@@ -27,15 +28,34 @@ var Tasker;
             var date = $(element).data('taskdate');
             this.load(taskId, masterId, date);
         }
+        /** Loads the data for the task.
+         * Currently, this is called once only, but later this could be called multiple times
+         * (eg, if used in a SPA App)
+         */
         TaskEditViewModel.prototype.load = function (id, masterid, date) {
             var _this = this;
+            if (!id && !masterid) {
+                // It's a new task!
+                // Reset everything to default
+                this.taskType("new");
+                this.responsibles([]);
+                this.responsible(null);
+                this.name("");
+                this.description("");
+                this.repetionValue("");
+                this.repetitionInterval(1);
+                this.repetitionStart(new Date().toJSON());
+                this.repetitionUntil(null);
+                this.taskDate(new Date().toJSON());
+                return;
+            }
             this.isLoading(true);
             $.getJSON("/task/taskdata?id=" + (id || 0).toString() + "&masterid=" + (masterid || 0) + "&date=" + (date || ""))
                 .then(function (res) {
                 _this.isLoading(false);
                 _this.description(res.description);
                 _this.name(res.name);
-                _this.taskType = res.type;
+                _this.taskType(res.type);
                 var rruleData = res.rrule ? res.rrule.split(';')
                     .map(function (s) { return s.split('='); })
                     .reduce(function (p, c) {
@@ -95,6 +115,10 @@ var Tasker;
                 return false;
             }
             this.errorMessage('');
+            // If it occurs multiple times, this will be a "Master", else it's a single
+            if (this.taskType() === 'new') {
+                this.taskType(this.repetionValue() ? "MASTER" : "SINGLE");
+            }
             return true;
         };
         return TaskEditViewModel;

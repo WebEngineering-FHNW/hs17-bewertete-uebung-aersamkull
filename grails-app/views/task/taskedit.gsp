@@ -5,23 +5,27 @@
 </head>
 <body>
     <form id="frmEditTask" style="display: none" data-bind="visible: true" data-taskid="${id}"  data-taskmasterid="${masterid}"  data-taskdate="${date}">
+        <input type="hidden" value="${id}" name="id" />
+        <input type="hidden" value="${masterid}" name="masterid" />
+        <input type="hidden" value="${date}" name="date" />
+        <input type="hidden" data-bind="value: taskType" name="type" />
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Name</label>
           <div class="col-sm-10">
-            <input data-bind="value: name" required type="text" class="form-control" placeholder="Name">
+            <input name="name" data-bind="value: name" required type="text" class="form-control" placeholder="Name">
           </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Description</label>
             <div class="col-sm-10">
-              <textarea rows="4" data-bind="value: description" class="form-control" placeholder=""> </textarea>
+              <textarea name="description" rows="4" data-bind="value: description" class="form-control" placeholder=""> </textarea>
 
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" data-bind="if: taskType()==='new'">
             <label class="col-sm-2 col-form-label">Repetition Frequency</label>
           <div class="col-sm-10">
-              <select class="form-control" data-bind="value: repetionValue">
+              <select class="form-control" name="rrule_freq" data-bind="value: repetionValue">
                   <option value="">Once</option>  
                   <option value="DAILY">Daily</option>
                   <option value="WEEKLY">Weekly</option>
@@ -39,7 +43,7 @@
                         <label class="col-form-label">Start</label>
                       </div>
                       <div class="col-md-10">
-                        <input type="date" data-bind="value: repetitionStart" class="form-control" required>
+                        <input type="date" name="rrule_start" data-bind="value: repetitionStart" class="form-control" required>
                       </div>
                     </div>
                 <div class=row>
