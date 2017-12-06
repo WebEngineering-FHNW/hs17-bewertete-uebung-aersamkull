@@ -4,25 +4,25 @@
   <title>Edit Task</title>
 </head>
 <body>
-    <form>
+    <form id="frmEditTask" style="display: none" data-bind="visible: true" data-taskid="${task.id}">
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Name</label>
           <div class="col-sm-10">
-            <input required type="text" class="form-control" placeholder="Name">
+            <input data-bind="value: name" required type="text" class="form-control" placeholder="Name">
           </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Description</label>
             <div class="col-sm-10">
-              <textarea class="form-control" placeholder=""> </textarea>
+              <textarea rows="4" data-bind="value: description" class="form-control" placeholder=""> </textarea>
 
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Repetition Frequency</label>
           <div class="col-sm-10">
-              <select class="form-control">
-                  <option value="ONCE">Once</option>  
+              <select class="form-control" data-bind="value: repetionValue">
+                  <option value="">Once</option>  
                   <option value="DAILY">Daily</option>
                   <option value="WEEKLY">Weekly</option>
                   <option value="MONTHLY">Monthly</option>
@@ -30,7 +30,7 @@
                 </select>
           </div>
         </div>
-          <fieldset class=form-group>
+          <fieldset class="form-group" data-bind="if: isRepetition">
             <div class="row">
               <label class="col-sm-2 col-form-label">Repetition</label>
               <div class="col-sm-10">
@@ -39,7 +39,7 @@
                         <label class="col-form-label">Start</label>
                       </div>
                       <div class="col-md-10">
-                        <input type=date class="form-control" required>
+                        <input type="date" data-bind="value: repetitionStart" class="form-control" required>
                       </div>
                     </div>
                 <div class=row>
@@ -47,7 +47,7 @@
                     <label class="col-form-label">Until</label>
                   </div>
                   <div class="col-md-10">
-                    <input type=date class="form-control">
+                    <input type="date" class="form-control" data-bind="value: repetitionUntil" />
                   </div>
                 </div>
                 <div class=row>
@@ -55,7 +55,7 @@
                       <label class="col-form-label">Interval</label>
                     </div>
                     <div class="col-md-10">
-                      <input min=1 value=1 type=number step=1 class="form-control">
+                      <input data-bind="value: repetitionInterval" min="1" type="number" step="1" class="form-control">
                     </div>
                   </div>
                   <div class=row>
@@ -63,7 +63,7 @@
                         <label class="col-form-label">Responsibles</label>
                       </div>
                       <div class="col-md-10">
-                          <select class="form-control" multiple>
+                          <select class="form-control" multiple  data-bind="selectedOptions: responsibles, options: allUsers, optionsText: 'name', optionsValue: 'id'">
                             <option>User1</option>
                             <option>User2</option>
                           </select>
@@ -72,26 +72,29 @@
               </div>
             </div>
           </fieldset>
-          <div class="form-group row">
+          <div class="form-group row" data-bind="ifnot: isRepetition">
               <label class="col-sm-2 col-form-label">Responsible</label>
             <div class="col-sm-10">
-                <select class="form-control">
-                    <option>User1</option>
-                    <option>User2</option>
+                <select class="form-control" data-bind="value: responsible, options: allUsers, optionsText: 'name', optionsValue: 'id'">
+                    
                   </select>
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" data-bind="ifnot: isRepetition">
               <label class="col-sm-2 col-form-label">Date</label>
             <div class="col-sm-10">
-                <input type=date required name=date class=form-control>
+                <input type="date" required name="date" data-bind="value: taskDate" class=form-control>
             </div>
           </div>
         <div class="form-group row">
           <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <div class="alert alert-danger" data-bind="text: errorMessage, visible: errorMessage"></div>
+            <button data-bind="click: save" type="submit" class="btn btn-primary">Save</button>
           </div>
         </div>
       </form>
 </body>
 </html>
+<content tag="js">
+  <asset:javascript src="taskedit.js" />
+</content>

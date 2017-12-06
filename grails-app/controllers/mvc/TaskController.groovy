@@ -9,14 +9,48 @@ class TaskController {
 	def index(){
 		return tasklist( null, null, null)
 	} 
-	def edit(int id) {
-		render view: "taskedit", model : [task: TaskBase.read(id), newTask: true ]
+	def edit(int id, int masterid, String date) {
+		def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+		LocalDate dateDt = date == null ? null : LocalDate.parse(date, fmt) 
+		TaskBase task;
+		if(id) {
+			task = TaskBase.read(id)
+		}
+		else {
+			def master = TaskMaster.read(masterid)
+			task = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
+		}
+		render view: "taskedit", model : [task: task, newTask: true, id: id, masterid: masterid, date: date ]
 	}
 	
-	def taskdata(int id) {
-		def data = TaskBase.read(id)
+	def taskdata(int id, int masterid, String date) { 
+		TaskBase data;
 		
-		render JsonOutput.toJson([id: data.id, name: data.name, type: data.type, rrule: data.rrule?.toString()])
+		if(id) {
+			data = TaskBase.read(id)
+			
+		}
+		else {
+			def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+			LocalDate dateDt = date == null ? null : LocalDate.parse(date, fmt) 
+			def master = TaskMaster.read(masterid)
+			data = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
+		}
+		def jsonData = [id: data.id, 
+			 name: data.name, type: data.type]
+		if(data instanceof TaskMaster) {
+			jsonData.rrule = data.rrule.toString()
+			jsonData.responsibles = data.responsibles.collect { [id: it.id, name: it.name] }
+		}
+		if(data instanceof TaskSingle) {
+			jsonData.date = data.date.toString()
+			jsonData.responsible = [id: data.responsible.id, name: data.responsible.name]
+		}
+		if(data instanceof TaskOccurenceException) {
+			jsonData.master = data.master.id
+		}
+
+		render JsonOutput.toJson(jsonData)
 	}
 	
 	def "new"() {
@@ -54,6 +88,7 @@ class TaskEnumerator {
 		}
 		return allSingleTasks
 	}
+
 	public static List<TaskOccurenceException> getOccurences(TaskMaster tm, LocalDate fromDate, LocalDate toDate) {
 		if(tm.rrule.start > toDate) {
 			return [];
