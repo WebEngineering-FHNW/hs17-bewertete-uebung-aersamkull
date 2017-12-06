@@ -60,7 +60,7 @@ class TaskController {
 	def save() { 
 		def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 		def task;
-		if(!params.id) {
+		if(!params.id || params.id == "" || params.id == "0") {
 			if(params.type == TaskBase.TYPE_MASTER) {
 				task = new TaskMaster(type: TaskBase.TYPE_MASTER);
 			}
@@ -70,6 +70,7 @@ class TaskController {
 			else if(params.type == TaskBase.TYPE_OCCURENCE) {
 				TaskMaster master = TaskMaster.get(params.masterid)
 				task = new TaskOccurenceException(type: TaskBase.TYPE_EXCEPTION, master: master);
+				// master.exceptions.add(task)
 			} 
 			else {
 				throw IllegalArgumentException("type");
@@ -77,6 +78,9 @@ class TaskController {
 		}
 		else {
 			task = TaskBase.get(params.id);
+			if(!task) {
+				throw IllegalArgumentException("task");
+			}
 		} 
 		task.name = params.name
 		task.description = params.description
