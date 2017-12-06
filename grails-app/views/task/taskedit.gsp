@@ -4,10 +4,16 @@
   <title>Edit Task</title>
 </head>
 <body>
-    <form id="frmEditTask" style="display: none" data-bind="visible: true" data-taskid="${id}"  data-taskmasterid="${masterid}"  data-taskdate="${date}">
+    <form id="frmEditTask" 
+      style="display: none" data-bind="visible: true" data-taskid="${id}" 
+      data-taskmasterid="${masterid}" 
+      data-taskdate="${date}"
+      action="/task/save"
+      method="POST"
+      enctype="application/x-www-form-urlencoded"  
+      >
         <input type="hidden" value="${id}" name="id" />
         <input type="hidden" value="${masterid}" name="masterid" />
-        <input type="hidden" value="${date}" name="date" />
         <input type="hidden" data-bind="value: taskType" name="type" />
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Name</label>
@@ -51,7 +57,7 @@
                     <label class="col-form-label">Until</label>
                   </div>
                   <div class="col-md-10">
-                    <input type="date" class="form-control" data-bind="value: repetitionUntil" />
+                    <input name="rrule_until" type="date" class="form-control" data-bind="value: repetitionUntil" />
                   </div>
                 </div>
                 <div class=row>
@@ -59,7 +65,7 @@
                       <label class="col-form-label">Interval</label>
                     </div>
                     <div class="col-md-10">
-                      <input data-bind="value: repetitionInterval" min="1" type="number" step="1" class="form-control">
+                      <input name="rrule_interval" data-bind="value: repetitionInterval" min="1" type="number" step="1" class="form-control">
                     </div>
                   </div>
                   <div class=row>
@@ -67,7 +73,7 @@
                         <label class="col-form-label">Responsibles</label>
                       </div>
                       <div class="col-md-10">
-                          <select class="form-control" multiple  data-bind="selectedOptions: responsibles, options: allUsers, optionsText: 'name', optionsValue: 'id'">
+                          <select name="responsibles" class="form-control" multiple  data-bind="selectedOptions: responsibles, options: allUsers, optionsText: 'name', optionsValue: 'id'">
                             <option>User1</option>
                             <option>User2</option>
                           </select>
@@ -79,7 +85,7 @@
           <div class="form-group row" data-bind="ifnot: isRepetition">
               <label class="col-sm-2 col-form-label">Responsible</label>
             <div class="col-sm-10">
-                <select class="form-control" data-bind="value: responsible, options: allUsers, optionsText: 'name', optionsValue: 'id'">
+                <select name="responsible" class="form-control" data-bind="value: responsible, options: allUsers, optionsText: 'name', optionsValue: 'id'">
                     
                   </select>
             </div>
@@ -87,7 +93,7 @@
           <div class="form-group row" data-bind="ifnot: isRepetition">
               <label class="col-sm-2 col-form-label">Date</label>
             <div class="col-sm-10">
-                <input type="date" required name="date" data-bind="value: taskDate" class=form-control>
+                <input type="date" required name="date" data-bind="value: taskDate, enable: taskType() !== 'OCCURENCE' && taskType() !== 'EXCEPTION'" class=form-control>
             </div>
           </div>
         <div class="form-group row">
