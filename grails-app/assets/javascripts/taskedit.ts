@@ -37,6 +37,60 @@ namespace Tasker {
             $.getJSON("/user/usersdata").then((res)=>{
                 this.allUsers(res.dt);
             });
+            const taskId = parseInt($(element).data('taskid'));
+            const masterId = parseInt($(element).data('taskmasterid'));
+            const date = $(element).data('taskdate');
+            this.load(taskId, masterId, date);
+        }
+
+        load(id: number|undefined, masterid: number|undefined, date: string|undefined) {
+            this.isLoading(true);
+            $.getJSON(`/task/taskdata?id=${(id||0).toString()}&masterid=${masterid||0}&date=${date||""}`)
+                .then(res=>{
+                    this.isLoading(false);
+                    this.description(res.description);
+                    this.name(res.name);
+                    this.taskType = res.type;
+                    const rruleData = res.rrule ? (<string>res.rrule).split(';')
+                        .map(s=>s.split('='))
+                        .reduce((p, c)=> {
+                            p[c[0]] = c[1]
+                            return p;
+                        }, <any>{}): null;
+                        if(rruleData){
+                            this.repetionValue(rruleData.FREQ);
+                            this.repetitionInterval(parseInt(rruleData.INTERVAL));
+                            this.repetitionStart(rruleData.START);
+                            if(rruleData.COUNT) {
+                                this.repetitionUntil(null);
+                                // No support for COUNT on GUI currently
+                            }
+                            else {
+                                this.repetitionUntil(rruleData.UNTIL||null);
+                            }
+                        }
+                        else {
+                            this.repetionValue("");
+                        }
+                        if(res.responsibles) {
+                            this.responsibles(res.responsibles.map((v: UserData)=>v.id));
+                        }
+                        else {
+                            this.responsibles([]);
+                        }
+                        if(res.responsible) {
+                            this.responsible((<UserData>res.responsible).id);
+                        }
+                        else {
+                            this.responsible(null);
+                        }
+                        if(res.date) {
+                            this.taskDate(res.date);
+                        }
+                        else {
+                            this.taskDate(null);
+                        }
+                });
         }
 
         save(dt: never, evt: Event) {

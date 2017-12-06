@@ -4,7 +4,7 @@
   <title>Edit Task</title>
 </head>
 <body>
-    <form id="frmEditTask" style="display: none" data-bind="visible: true" data-taskid="${task.id}">
+    <form id="frmEditTask" style="display: none" data-bind="visible: true" data-taskid="${id}"  data-taskmasterid="${masterid}"  data-taskdate="${date}">
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Name</label>
           <div class="col-sm-10">

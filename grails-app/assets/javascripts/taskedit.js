@@ -22,7 +22,61 @@ var Tasker;
             $.getJSON("/user/usersdata").then(function (res) {
                 _this.allUsers(res.dt);
             });
+            var taskId = parseInt($(element).data('taskid'));
+            var masterId = parseInt($(element).data('taskmasterid'));
+            var date = $(element).data('taskdate');
+            this.load(taskId, masterId, date);
         }
+        TaskEditViewModel.prototype.load = function (id, masterid, date) {
+            var _this = this;
+            this.isLoading(true);
+            $.getJSON("/task/taskdata?id=" + (id || 0).toString() + "&masterid=" + (masterid || 0) + "&date=" + (date || ""))
+                .then(function (res) {
+                _this.isLoading(false);
+                _this.description(res.description);
+                _this.name(res.name);
+                _this.taskType = res.type;
+                var rruleData = res.rrule ? res.rrule.split(';')
+                    .map(function (s) { return s.split('='); })
+                    .reduce(function (p, c) {
+                    p[c[0]] = c[1];
+                    return p;
+                }, {}) : null;
+                if (rruleData) {
+                    _this.repetionValue(rruleData.FREQ);
+                    _this.repetitionInterval(parseInt(rruleData.INTERVAL));
+                    _this.repetitionStart(rruleData.START);
+                    if (rruleData.COUNT) {
+                        _this.repetitionUntil(null);
+                        // No support for COUNT on GUI currently
+                    }
+                    else {
+                        _this.repetitionUntil(rruleData.UNTIL || null);
+                    }
+                }
+                else {
+                    _this.repetionValue("");
+                }
+                if (res.responsibles) {
+                    _this.responsibles(res.responsibles.map(function (v) { return v.id; }));
+                }
+                else {
+                    _this.responsibles([]);
+                }
+                if (res.responsible) {
+                    _this.responsible(res.responsible.id);
+                }
+                else {
+                    _this.responsible(null);
+                }
+                if (res.date) {
+                    _this.taskDate(res.date);
+                }
+                else {
+                    _this.taskDate(null);
+                }
+            });
+        };
         TaskEditViewModel.prototype.save = function (dt, evt) {
             if (!this.name()) {
                 this.errorMessage("Please provide a name");

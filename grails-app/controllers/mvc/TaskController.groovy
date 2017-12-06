@@ -36,7 +36,7 @@ class TaskController {
 			def master = TaskMaster.read(masterid)
 			data = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
 		}
-		def jsonData = [id: data.id, 
+		def jsonData = [id: data.id, description: data.description,
 			 name: data.name, type: data.type]
 		if(data instanceof TaskMaster) {
 			jsonData.rrule = data.rrule.toString()
