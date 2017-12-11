@@ -7,6 +7,8 @@ import groovy.json.JsonOutput
 class TaskController {
 	static fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
+	def taskService
+
 	static allowedMethods = [delete:'DELETE']
 
 	def index(){
@@ -35,7 +37,7 @@ class TaskController {
 		}
 		else {
 			def master = TaskMaster.read(masterid)
-			task = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
+			task = taskService.getOccurences(master, dateDt, dateDt)[0]
 		}
 		render view: "taskedit", model : [task: task, newTask: true, id: id, masterid: masterid, date: date ]
 	}
@@ -74,7 +76,7 @@ class TaskController {
 		else {
 			LocalDate dateDt = date == null ? null : LocalDate.parse(date, fmt) 
 			def master = TaskMaster.read(masterid)
-			data = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
+			data = taskService.getOccurences(master, dateDt, dateDt)[0]
 		}
 		def jsonData = getTaskJson(data)
 
@@ -148,7 +150,7 @@ class TaskController {
 		}
         LocalDate fromDateDt = fromDate == null ? LocalDate.now().plusDays(10) : LocalDate.parse(fromDate, fmt) 
         LocalDate toDateDt = toDate == null ?LocalDate.now().plusMonths(1) : LocalDate.parse(toDate, fmt) 
-        def allSingleTasks = TaskEnumerator.getTasks(fromDateDt, toDateDt, ownOnly ? loggedInUser: null);
+        def allSingleTasks = taskService.getTasks(fromDateDt, toDateDt, ownOnly ? loggedInUser: null);
 		render view: "tasklist", model: [tasks: allSingleTasks, fromDate: fromDateDt, toDate: toDateDt]
 	}
 }

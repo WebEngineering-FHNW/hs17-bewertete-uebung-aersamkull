@@ -16,9 +16,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <a class="navbar-brand" href="/#">
-            <i class="fa grails-icon">
-                 <asset:image src="grails-cupsonly-logo-white.svg"/>
-            </i> Simple Task
+             Simple Task
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -35,7 +33,7 @@
                                     ${request.cookies.find{ 'Username' == it.name }?.value}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <g:link controller="user" action="logout" class="dropdown-item" href="#">
+                                <g:link controller="user" action="logout" class="dropdown-item">
                                     <span class="oi oi-account-logout" aria-hidden="true"></span>
                                     Logout</g:link>
                                 </div>

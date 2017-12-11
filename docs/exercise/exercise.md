@@ -62,6 +62,7 @@ I'm particular proud of:
 
  - Using Bootstrap 4
  - Using Iconic, which is a lightweight Icon-Library
+ - Using Java 8 date type
  - It looks good :)
  - There are 4 task types: masters, occurences, exceptions and simple tasks. That all that MS Exchange knows :)
 - I used yarn/npm to document all versions used in this project

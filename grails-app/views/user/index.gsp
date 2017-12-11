@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="main"/>
-		<title>Form</title>
+		<title>Login</title>
 	</head>
 	<body>
         <div class="card logincard" id="frmLogin">

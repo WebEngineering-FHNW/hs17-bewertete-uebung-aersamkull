@@ -16,7 +16,7 @@
   
     <label class="sr-only" for="toDate">To</label>
     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-      <input data-bind="value: toDate" required type="date" class="form-control" name="toDate" id="toDate" value="${toDate}" placeholder="Username">
+      <input data-bind="value: toDate" required type="date" class="form-control" name="toDate" id="toDate" value="${toDate}" >
     </div>  
     <button data-bind="enable: isValid" type="submit" class="btn btn-primary">
         <span class="oi oi-reload" aria-hidden="true"></span>  

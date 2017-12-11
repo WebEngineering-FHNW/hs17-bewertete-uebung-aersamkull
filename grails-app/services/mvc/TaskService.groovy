@@ -1,22 +1,35 @@
 package mvc
 
+import grails.transaction.Transactional
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import groovy.json.JsonOutput
 
+@Transactional
+class TaskService {
 
-/**
- * Class for enumerating tasks from a recurrence rule to concrete dates
- */
-class TaskEnumerator {
-	public static List<TaskSingle> getTasks(LocalDate fromDateDt, LocalDate toDateDt, String userFilter) {
+    /**
+     * Get a single task from either an id or a masterid and a date
+     */
+    def getTask(int id, int masterid, LocalDate date) { 		
+		if(id) {
+			return TaskBase.read(id)			
+		}
+		else {
+			def master = TaskMaster.read(masterid)
+			return taskService.getOccurences(master, date, date)[0]
+		}
+    }
+
+    /**
+     * Gets all tasks (occurences) between the given dates and optionally filtered by a user
+     */
+    public List<TaskSingle> getTasks(LocalDate fromDateDt, LocalDate toDateDt, String userFilter) {
 		
 		List<TaskBase> allTasks = TaskBase.where {
 			(type == TaskBase.TYPE_SINGLE && (it as TaskSingle).date >= fromDateDt && (it as TaskSingle).date <= toDateDt) ||
 			(type == TaskBase.TYPE_MASTER && (it as TaskMaster).rrule.start <= toDateDt && ((it as TaskMaster).rrule.until == null || (it as TaskMaster).rrule.until >= fromDate))
 		}.list()
 		List<TaskSingle> allSingleTasks = allTasks.findAll { it.type == TaskBase.TYPE_SINGLE }
-		List<TaskSingle> occurences = allTasks.findAll { it.type == TaskBase.TYPE_MASTER }.collectMany { TaskEnumerator.getOccurences(it, fromDateDt, toDateDt) }
+		List<TaskSingle> occurences = allTasks.findAll { it.type == TaskBase.TYPE_MASTER }.collectMany { this.getOccurences(it, fromDateDt, toDateDt) }
 		allSingleTasks.addAll(occurences)
 		if(userFilter != null) {
 			allSingleTasks.removeIf{ it.responsible.name != userFilter  }
@@ -24,7 +37,10 @@ class TaskEnumerator {
 		return allSingleTasks
 	}
 
-	public static List<TaskOccurenceException> getOccurences(TaskMaster tm, LocalDate fromDate, LocalDate toDate) {
+    /**
+     * Gets the occurences from a task master between two given dates
+     */
+	public List<TaskOccurenceException> getOccurences(TaskMaster tm, LocalDate fromDate, LocalDate toDate) {
 		if(tm.rrule.start > toDate) {
 			return [];
 		}
@@ -64,8 +80,12 @@ class TaskEnumerator {
 		}
 		return listOfOccurences
 	}
+
+    /**
+     * Returns a new date with the added interval
+     */
 	private static LocalDate addByFrequency(LocalDate date1, String freq, int interval) {
-		// If's here are a bit of a code smell, but let's no make it complicated :)
+		// If's here are a bit of a code smell, but let's not make it complicated :)
 		if(freq == Rrule.FreqDaily) {
 			return date1.plusDays(interval);
 		}
