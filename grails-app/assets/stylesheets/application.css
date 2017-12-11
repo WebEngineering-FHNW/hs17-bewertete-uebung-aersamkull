@@ -7,6 +7,7 @@
 * You're free to add application-wide styles to this file and they'll appear at the top of the
 * compiled file, but it's generally better to create a new file per style scope.
 *
+*= require open-iconic/css/open-iconic-bootstrap
 *= require bootstrap
 *= require_self
 */
@@ -38,13 +39,37 @@
     border-radius: 5px;
     padding: 10px;
     margin: 3px;
+    vertical-align: top;
+   
+    min-width: 430px;
 }
+.taskBody {
+    min-height: 90px;
+}
+.taskBody > p {
+    margin-bottom: 0.5rem;
+}
+@media (max-width: 800px) { /* Below 800 px two items do not have place anymore anyway */
+    .taskItem {
+        min-width: auto;
+        min-height: auto;
+        display: block;
+    }
+}
+
 .taskItem input:read-only {
     border: 0px none white;
     border-radius: 0.25rem;
     background-color: transparent;
 }
+.taskButtonHoster {
+    min-height: 35px;
+}
 .taskItem .taskButtons {
     float: right;
 }
 
+.newTaskButton {
+    display: inline-block;
+    margin-bottom: 10px;
+}

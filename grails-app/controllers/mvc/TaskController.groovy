@@ -5,12 +5,23 @@ import java.time.format.DateTimeFormatter
 import groovy.json.JsonOutput
 
 class TaskController {
-
+	static fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 	def index(){
 		return tasklist( null, null, null)
 	} 
+	def delete(int id, int masterid, String date) {
+		TaskBase task;
+		if(id) {
+			task = TaskBase.read(id)
+		}
+		else {
+			def master = TaskMaster.read(masterid)
+			task = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
+		}
+		task.delete(flush: true)
+	}
 	def edit(int id, int masterid, String date) {
-		def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+		 
 		LocalDate dateDt = date == null ? null : LocalDate.parse(date, fmt) 
 		TaskBase task;
 		if(id) {
@@ -55,7 +66,6 @@ class TaskController {
 			
 		}
 		else {
-			def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 			LocalDate dateDt = date == null ? null : LocalDate.parse(date, fmt) 
 			def master = TaskMaster.read(masterid)
 			data = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
@@ -70,7 +80,6 @@ class TaskController {
 	}
 
 	def save() { 
-		def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 		def task;
 		if(!params.id || params.id == "" || params.id == "0") {
 			if(params.type == TaskBase.TYPE_MASTER) {
@@ -124,7 +133,6 @@ class TaskController {
 		if(loggedInUser == null) {
 			return redirect(controller: "user", action: "index")
 		}
-        def fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         if(ownOnly == null) {
 			ownOnly = false
 		}
