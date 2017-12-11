@@ -22,7 +22,7 @@
         <span class="oi oi-reload" aria-hidden="true"></span>  
     </button>
   </form>
-<ul class="tasklist">
+<ul class="tasklist" id="taskList">
 <g:each var="task" in="${tasks}">
   <li class="taskItem">
     <div>
@@ -34,16 +34,20 @@
         </div>
         <div class="taskButtonHoster">
           <div class="taskButtons">
-            <button class="btn btn-outline-danger" type="button">
-                <span class="oi oi-trash" aria-hidden="true"></span>  
-            </button>  
+           
 
             <g:if test="${task.type == 'SINGLE' || task.type == 'MASTER'}">
+                <button  data-taskid="${task.id}" class="btn btn-outline-danger deleteButton" type="button">
+                    <span class="oi oi-trash" aria-hidden="true"></span>  
+                </button>  
                 <a href="/task/edit?id=${task.id}"  class="btn btn-outline-secondary">
                   <span class="oi oi-pencil" aria-hidden="true"></span>
                 </a>
             </g:if>
               <g:if test="${task.type == 'OCCURENCE' || task.type == 'EXCEPTION'}">
+                  <button  data-taskmasterid="${task.masterid}" data-date="${task.date}" class="btn btn-outline-danger deleteButton" type="button">
+                      <span class="oi oi-trash" aria-hidden="true"></span>  
+                  </button>  
                   <a href="/task/edit?masterid=${task.masterid}&date=${task.date}" class="btn btn-outline-primary">
                     <span class="oi oi-pencil" aria-hidden="true"></span> Edit
                   </a>

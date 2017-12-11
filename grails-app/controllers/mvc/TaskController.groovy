@@ -6,19 +6,25 @@ import groovy.json.JsonOutput
 
 class TaskController {
 	static fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+	static allowedMethods = [delete:'DELETE']
+
 	def index(){
 		return tasklist( null, null, null)
 	} 
 	def delete(int id, int masterid, String date) {
 		TaskBase task;
+		LocalDate dateDt = date == null ? null : LocalDate.parse(date, fmt) 
 		if(id) {
 			task = TaskBase.read(id)
+			task.delete(flush: true)
 		}
 		else {
 			def master = TaskMaster.read(masterid)
-			task = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
+			master.deletedOccurences.add(new DeletedTask(date: dateDt))
+			master.save(failOnError: true, flush: true)
 		}
-		task.delete(flush: true)
+		render "Ok"
 	}
 	def edit(int id, int masterid, String date) {
 		 
