@@ -19,6 +19,12 @@ var Tasker;
             this.allUsers = ko.observableArray([]);
             this.errorMessage = ko.observable('');
             this.isLoading = ko.observable(false);
+            this.taskTypeReal = ko.pureComputed(function () {
+                if (_this.taskType() === 'new') {
+                    return _this.repetionValue() ? "MASTER" : "SINGLE";
+                }
+                return _this.taskType();
+            });
             this.isRepetition = ko.pureComputed(function () { return _this.repetionValue() !== ''; });
             $.getJSON("/user/usersdata").then(function (res) {
                 _this.allUsers(res.dt);
@@ -115,10 +121,6 @@ var Tasker;
                 return false;
             }
             this.errorMessage('');
-            // If it occurs multiple times, this will be a "Master", else it's a single
-            if (this.taskType() === 'new') {
-                this.taskType(this.repetionValue() ? "MASTER" : "SINGLE");
-            }
             return true;
         };
         return TaskEditViewModel;

@@ -113,9 +113,10 @@ class TaskController {
 			
 		}
 		
-		task.save(failOnError: true)
-	//	redirect  (uri: "/")
-		render model: getTaskJson(task)
+		task.save(failOnError: true, flush: true)
+		
+		redirect  (uri: "/")
+		// render model: getTaskJson(task)
 	}
 	
     def tasklist(String fromDate, String toDate, Boolean ownOnly) {

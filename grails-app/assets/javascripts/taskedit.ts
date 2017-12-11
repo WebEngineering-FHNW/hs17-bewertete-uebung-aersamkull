@@ -16,6 +16,7 @@ namespace Tasker {
         taskDate = ko.observable<string>();
 
         taskType = ko.observable("new");
+        taskTypeReal: KnockoutComputed<string>;
 
         repetitionStart = ko.observable(new Date().toJSON());
         repetitionUntil = ko.observable(new Date().toJSON());
@@ -32,7 +33,12 @@ namespace Tasker {
 
 
         constructor(element: HTMLElement){
-            
+            this.taskTypeReal = ko.pureComputed(()=>{
+                if (this.taskType()==='new') {
+                    return this.repetionValue() ? "MASTER": "SINGLE"; 
+                }
+                return this.taskType();
+            });
             this.isRepetition = ko.pureComputed(()=>this.repetionValue() !== '');
             $.getJSON("/user/usersdata").then((res)=>{
                 this.allUsers(res.dt);
@@ -132,10 +138,7 @@ namespace Tasker {
             }
             this.errorMessage('');
             
-            // If it occurs multiple times, this will be a "Master", else it's a single
-            if (this.taskType()==='new') {
-                this.taskType(this.repetionValue() ? "MASTER": "SINGLE"); 
-            }
+            
             return true;
         }
     }

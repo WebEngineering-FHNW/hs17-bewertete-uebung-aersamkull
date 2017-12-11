@@ -60,7 +60,7 @@ class TaskEnumerator {
 			}
 			nrOccurencesFromStart++
 			currentDate = addByFrequency(currentDate, tm.rrule.freq, tm.rrule.interval)
-			responsibleId = (responsibleId+1) % responsibleCount
+			responsibleId = responsibleCount==0? 0: ((responsibleId+1) % responsibleCount)
 		}
 		return listOfOccurences
 	}

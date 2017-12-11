@@ -14,7 +14,7 @@
       >
         <input type="hidden" value="${id}" name="id" />
         <input type="hidden" value="${masterid}" name="masterid" />
-        <input type="hidden" data-bind="value: taskType" name="type" />
+        <input type="hidden" data-bind="value: taskTypeReal" name="type" />
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Name</label>
           <div class="col-sm-10">
