@@ -31,10 +31,13 @@
                        <g:if test="${request.cookies.find{ 'Username' == it.name }}">
                         <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        ${request.cookies.find{ 'Username' == it.name }?.value}
+                                    <span class="oi oi-person" aria-hidden="true"></span>   
+                                    ${request.cookies.find{ 'Username' == it.name }?.value}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <g:link controller="user" action="logout" class="dropdown-item" href="#">Logout</g:link>
+                                <g:link controller="user" action="logout" class="dropdown-item" href="#">
+                                    <span class="oi oi-account-logout" aria-hidden="true"></span>
+                                    Logout</g:link>
                                 </div>
                             </li>
                         </g:if>

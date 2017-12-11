@@ -43,7 +43,7 @@
           <fieldset class="form-group" data-bind="if: isRepetition">
             <div class="row">
               <label class="col-sm-2 col-form-label">Repetition</label>
-              <div class="col-sm-10">
+              <div class="col-sm-10 colRepetition">
                   <div class=row>
                       <div class="col-md-2">
                         <label class="col-form-label">Start</label>

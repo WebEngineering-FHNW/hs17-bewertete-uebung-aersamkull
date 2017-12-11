@@ -87,7 +87,9 @@ class TaskController {
 
 	def save() { 
 		def task;
+		Boolean isNew = false;
 		if(!params.id || params.id == "" || params.id == "0") {
+			isNew = true;
 			if(params.type == TaskBase.TYPE_MASTER) {
 				task = new TaskMaster(type: TaskBase.TYPE_MASTER);
 			}
@@ -112,12 +114,14 @@ class TaskController {
 		task.description = params.description
 		if(task.type == TaskBase.TYPE_MASTER) {
 			task.responsibles = params.responsibles.collect { User.get(it.toInteger()) }
-			task.rrule = new Rrule()
-			task.rrule.freq = params.rrule_freq
-			task.rrule.start = LocalDate.parse(params.rrule_start, fmt) 
-			task.rrule.until = params.rrule_until ? LocalDate.parse(params.rrule_until, fmt)  : null
-			task.rrule.count = params.rrule_count ? params.rrule_count : null
-			task.rrule.interval = params.rrule_interval.toInteger()
+			if(isNew) {
+				task.rrule = new Rrule()
+				task.rrule.freq = params.rrule_freq
+				task.rrule.start = LocalDate.parse(params.rrule_start, fmt) 
+				task.rrule.until = params.rrule_until ? LocalDate.parse(params.rrule_until, fmt)  : null
+				task.rrule.count = params.rrule_count ? params.rrule_count : null
+				task.rrule.interval = params.rrule_interval.toInteger()
+			}
 		}
 		else if (task.type == TaskBase.TYPE_SINGLE || task.type == TaskBase.TYPE_EXCEPTION) {
 			task.responsible = User.get(params.responsible.toInteger())
