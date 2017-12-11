@@ -11,12 +11,13 @@ class TaskMaster extends TaskBase {
 	Rrule rrule;
 	
 	List<User> responsibles
-	static hasMany = [responsibles: User, deletedOccurences: DeletedTask, exceptions: TaskOccurenceException]
-	static mappedBy = [responsibles: "taskMaster", exceptions: "master"]
+	static hasMany = [responsibles: User, deletedOccurences: DeletedTask]
+	static mappedBy = [responsibles: "taskMaster"]
 
 	static embedded = ["rrule"]	
 	
 	static constraints = {
+		importFrom TaskBase 
 		rrule (nullable: false)
 		type inList: [TaskBase.TYPE_MASTER]
 		responsibles (minSize: 1)

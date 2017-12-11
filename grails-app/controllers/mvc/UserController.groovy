@@ -7,7 +7,10 @@ class UserController {
 
 	// static allowedMethods = [loginuser:'POST', logout: 'POST']
 
-    def index() { }
+    def index() { 
+		def users = User.list()
+		render view: "index", model : [users: users]
+	}
 	
 	def loginuser(User us) {
 		

@@ -35,7 +35,7 @@ class TaskEnumerator {
 		def listOfOccurences = [];
 		LocalDate currentDate = tm.rrule.start;
 		Set<LocalDate> deletedOccurences = tm.deletedOccurences*.date;
-		Set<TaskOccurenceException> exp = tm.exceptions;
+		Set<TaskOccurenceException> exp = TaskOccurenceException.findAllByMasterid(tm.id);
 		Set<LocalDate> exceptionDates = exp*.date;
 		int responsibleCount = tm.responsibles.size()
 		int responsibleId = 0
@@ -52,7 +52,7 @@ class TaskEnumerator {
 				 	oce = new TaskOccurenceException(type: TaskBase.TYPE_OCCURENCE,
 						 name: tm.name,
 						 description: tm.description,
-						 master: tm,
+						 masterid: tm.id,
 						 date: currentDate,
 						 responsible: tm.responsibles.getAt(responsibleId))
 				}

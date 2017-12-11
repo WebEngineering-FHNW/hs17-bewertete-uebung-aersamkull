@@ -23,6 +23,30 @@ class TaskController {
 		render view: "taskedit", model : [task: task, newTask: true, id: id, masterid: masterid, date: date ]
 	}
 	
+	def tasklist4debug(){
+		def data = TaskBase.list()
+		def jsons = data.collect { getTaskJson(it)}
+		render JsonOutput.toJson(jsons)
+	}
+	private def getTaskJson(TaskBase data) {
+
+		def jsonData = [id: data.id, description: data.description,
+			 name: data.name, type: data.type]
+		if(data instanceof TaskMaster) {
+			jsonData.rrule = data.rrule.toString()
+			jsonData.responsibles = data.responsibles.collect { [id: it.id, name: it.name] }
+		}
+		if(data instanceof TaskSingle) {
+			jsonData.date = data.date.toString()
+			if(data.responsible) {
+				jsonData.responsible = [id: data.responsible.id, name: data.responsible.name]
+			}
+		}
+		if(data instanceof TaskOccurenceException) {
+			jsonData.masterid = data.masterid
+		}
+		return jsonData
+	}
 	def taskdata(int id, int masterid, String date) { 
 		TaskBase data;
 		
@@ -36,19 +60,7 @@ class TaskController {
 			def master = TaskMaster.read(masterid)
 			data = TaskEnumerator.getOccurences(master, dateDt, dateDt)[0]
 		}
-		def jsonData = [id: data.id, description: data.description,
-			 name: data.name, type: data.type]
-		if(data instanceof TaskMaster) {
-			jsonData.rrule = data.rrule.toString()
-			jsonData.responsibles = data.responsibles.collect { [id: it.id, name: it.name] }
-		}
-		if(data instanceof TaskSingle) {
-			jsonData.date = data.date.toString()
-			jsonData.responsible = [id: data.responsible.id, name: data.responsible.name]
-		}
-		if(data instanceof TaskOccurenceException) {
-			jsonData.master = data.master.id
-		}
+		def jsonData = getTaskJson(data)
 
 		render JsonOutput.toJson(jsonData)
 	}
@@ -68,9 +80,8 @@ class TaskController {
 				task = new TaskSingle(type: TaskBase.TYPE_SINGLE);
 			} 
 			else if(params.type == TaskBase.TYPE_OCCURENCE) {
-				TaskMaster master = TaskMaster.get(params.masterid)
-				task = new TaskOccurenceException(type: TaskBase.TYPE_EXCEPTION, master: master);
-				// master.exceptions.add(task)
+				TaskMaster master = TaskMaster.get(params.masterid)				
+				task = new TaskOccurenceException(type: TaskBase.TYPE_EXCEPTION, masterid: master.id, date: LocalDate.parse(params.date, fmt) );
 			} 
 			else {
 				throw IllegalArgumentException("type");
@@ -84,7 +95,7 @@ class TaskController {
 		} 
 		task.name = params.name
 		task.description = params.description
-		if(params.type == TaskBase.TYPE_MASTER) {
+		if(task.type == TaskBase.TYPE_MASTER) {
 			task.responsibles = params.responsibles.collect { User.get(it.toInteger()) }
 			task.rrule = new Rrule()
 			task.rrule.freq = params.rrule_freq
@@ -93,15 +104,18 @@ class TaskController {
 			task.rrule.count = params.rrule_count ? params.rrule_count : null
 			task.rrule.interval = params.rrule_interval.toInteger()
 		}
-		else if (params.type == TaskBase.TYPE_SINGLE || params.type == TaskBase.TYPE_EXCEPTION) {
-			task.responsible = params.responsible.toInteger()
+		else if (task.type == TaskBase.TYPE_SINGLE || task.type == TaskBase.TYPE_EXCEPTION) {
+			task.responsible = User.get(params.responsible.toInteger())
 			if(params.type == TaskBase.TYPE_SINGLE) {
 				// Cannot change the date of a task occurence or task exception 
 				task.date = LocalDate.parse(params.date, fmt) 
 			}
+			
 		}
-		task.save()
-		redirect  (uri: "/")
+		
+		task.save(failOnError: true)
+	//	redirect  (uri: "/")
+		render model: getTaskJson(task)
 	}
 	
     def tasklist(String fromDate, String toDate, Boolean ownOnly) {

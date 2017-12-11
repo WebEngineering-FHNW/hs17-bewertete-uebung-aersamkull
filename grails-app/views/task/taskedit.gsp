@@ -93,6 +93,9 @@
           <div class="form-group row" data-bind="ifnot: isRepetition">
               <label class="col-sm-2 col-form-label">Date</label>
             <div class="col-sm-10">
+                <g:if test="${task.type == 'OCCURENCE' || task.type == 'EXCEPTION' }">
+                  <input type="hidden" value="${task.date}" name="date" />
+                </g:if>
                 <input type="date" required name="date" data-bind="value: taskDate, enable: taskType() !== 'OCCURENCE' && taskType() !== 'EXCEPTION'" class=form-control>
             </div>
           </div>

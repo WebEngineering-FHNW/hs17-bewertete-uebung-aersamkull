@@ -12,6 +12,8 @@ class TaskSingle extends TaskBase {
     LocalDate date
 
     static constraints = {
+      importFrom TaskBase 
+      name (unique: ['date'])
     }
 
     String toString() {

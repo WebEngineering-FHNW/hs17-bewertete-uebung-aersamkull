@@ -32,8 +32,8 @@
               <a href="/task/edit?id=${task.id}"  class="btn btn-outline-secondary">Edit</a>
           </g:if>
             <g:if test="${task.type == 'OCCURENCE' || task.type == 'EXCEPTION'}">
-                <a href="/task/edit?masterid=${task.master.id}&date=${task.date}" class="btn btn-outline-primary">Edit</a>
-                <a href="/task/edit?id=${task.master.id}"  class="btn btn-outline-secondary">Edit Master</a>
+                <a href="/task/edit?masterid=${task.masterid}&date=${task.date}" class="btn btn-outline-primary">Edit</a>
+                <a href="/task/edit?id=${task.masterid}"  class="btn btn-outline-secondary">Edit Master</a>
             </g:if>
         </div>
     </div>

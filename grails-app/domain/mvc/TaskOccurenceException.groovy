@@ -8,8 +8,9 @@ import java.time.LocalDate
  * Distinction between the two is possible via derived "type" property
  */
 class TaskOccurenceException extends TaskSingle {
-    TaskMaster master
+    int masterid
     
     static constraints = {
+        importFrom TaskBase 
     }
 }

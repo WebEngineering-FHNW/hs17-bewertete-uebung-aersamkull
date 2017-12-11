@@ -11,7 +11,7 @@ abstract class TaskBase {
 	static final String TYPE_SINGLE = "SINGLE"
 	
     static constraints = {
-		name (blank: false, maxSize: 50, minSize: 3, unique: true)
+		name (blank: false, maxSize: 50, minSize: 3)
         description (nullable: true, blank: true, maxSize: 4000)
 		type inList: [TYPE_MASTER, TYPE_OCCURENCE, TYPE_EXCEPTION, TYPE_SINGLE] 
     }
