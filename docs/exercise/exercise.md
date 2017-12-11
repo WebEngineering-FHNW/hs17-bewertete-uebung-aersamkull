@@ -55,8 +55,16 @@ External contributions:
 
 Other comments: 
 
+- This application requires a modern browser, IE 11 should work but no older browsers
+- I checkedin both, the TypeScript and the Javascript files. This leads to more changes but makes the build process independent of TypeScript
+
 I'm particular proud of:
 
+ - Using Bootstrap 4
+ - Using Iconic, which is a lightweight Icon-Library
+ - It looks good :)
+ - There are 4 task types: masters, occurences, exceptions and simple tasks. That all that MS Exchange knows :)
+- I used yarn/npm to document all versions used in this project
 
 ## Project grading 
 
