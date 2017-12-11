@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <a class="navbar-brand" href="/#">
             <i class="fa grails-icon">
                  <asset:image src="grails-cupsonly-logo-white.svg"/>
@@ -28,6 +28,16 @@
                         <li class="nav-item active">
                             <g:link controller="task" class="nav-link" >Home</g:link>
                        </li>
+                       <g:if test="${request.cookies.find{ 'Username' == it.name }}">
+                        <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        ${request.cookies.find{ 'Username' == it.name }?.value}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <g:link controller="user" action="logout" class="dropdown-item" href="#">Logout</g:link>
+                                </div>
+                            </li>
+                        </g:if>
                 </ul>
         </div>
     </nav>
