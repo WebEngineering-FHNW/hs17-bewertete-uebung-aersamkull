@@ -67,6 +67,7 @@ I'm particular proud of:
  - It looks good :)
  - There are 4 task types: masters, occurences, exceptions and simple tasks. That all that MS Exchange knows :)
 - I used yarn/npm to document all versions used in this project
+- Use of media queries to make it work on mobile devices
 
 ## Project grading 
 
