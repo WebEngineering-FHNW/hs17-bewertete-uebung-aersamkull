@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <title>Simple Task System</title>
+        <style type="text/css">
+            h1, h2, h3, h4 {
+                font-family: "Segoe UI light", "Roboto light", sans-serif;
+            }
+            body, p {
+                font-family: "Segoe UI", "Roboto", sans-serif;
+            }
+
+            h2::before {
+                content: counter(h2count) " ";                
+            }
+            h2 {
+                counter-reset: h3count;
+                counter-increment: h2count;
+            }
+            h3::before {
+                content: counter(h2count) "." counter(h3count) " ";                
+            }
+            h3 {
+                counter-reset: h4count;
+                counter-increment: h3count;
+            }
+            h4::before {
+                content: counter(h2count) "." counter(h3count) "." counter(h4count) " ";                
+            }
+            h4 {
+                counter-reset: h5count;
+                counter-increment: h4count;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Introducing a simple Task system</h1>
+        <summary>
+            The simple task system allows you to create, edit and delete tasks,
+            both recurring tasks and simple tasks.
+        </summary>
+        <h2>User handling</h2>
+        <p>
+            A task system without users would be meaningless, someone has to do the tasks :)
+            In order to not have to implement a whole user handling system, a very simple approach
+            has been chosen: Just enter any username.
+            <br />
+            Technically, this has been realized through a simple cookie that stores that username. 
+            If the username does not exist yet, a new user is created in the database.
+        </p>
+        <h2>Task handling</h2>
+        <p>There are different types of tasks, each of which has a slightly different meaning.
+            In general, a task has a name and a description and a type, which is one of four types:
+            <ul>
+                <li> Master</li>
+                <li>Occurence</li>
+                <li>Exception</li>
+                <li>Single</li>
+            </ul>
+        </p>
+        <h3>Task Types</h3>
+        <h4>Master Tasks</h4>
+        <p>A master task is actually a description of multiple tasks. It describes when these tasks do occur. 
+            For example, a master task could be a tasks that describes a congratulation to a birthday, that reoccurs every year.
+        </p>
+        <h4>Occurence</h4>
+        <p> 
+            If you have a master task, the instances of this task are called Occurences (or Exceptions, but more on that later).
+            As a task master does not have to have an end date, there can be an infinite number of occurences for a task master.
+            A typical example would be a single birthday.
+        </p>
+        <h4>Exception</h4>
+        <p>
+            An exception is actually the same as an occurence but something is not as described by the task master.
+            For example, you decide for a specific birthday to add some description like: "This year, he gets 50, so let's do a big party"
+        </p>
+        <h4>Single Tasks</h4>
+        <p>
+            Well, that is just a simple task that occurs once only, nothing complicated.
+        </p>
+        <h3>Technical Implementation of Tasks</h3>
+        <p>Three out of those 4 task types are persisted, only the Occurence is not and therefore has no "id".
+            However, we still need a way to uniquely identify an Occurence. This is done by 
+            using the date of the occurence and the masterid. This has the consequence that 
+            for a master appointment the following things cannot be changed:
+
+            <ul>
+                <li>The date of any occurence</li>
+                <li>The reccurence rule</li>
+            </ul>
+
+            Deleting occurences is done by just storing the deleted dates on the master instance.
+        </p>
+        <h2>Implementation</h2>
+        <h3>Browser support</h3>
+        <p>The application has been developed against the most recent version of Opera Browser. </p>
+        <p>Support of input type=date is very helpful for the tool to 
+        be displayed nicely:</p>
+        <p>
+                <input type="date">
+        </p>
+        <p>Any modern browser should work, from IE 11 upwards</p>
+        <h3>Usage of libraries</h3>
+        <p>The following libraries have been used:</p>
+        <ul>
+            <li>Bootstrap 4: <a href="https://getbootstrap.com">getbootstrap.com</a></li>
+            <li>JQuery 3: <a href="https://jquery.com">jquery.com</a></li>
+            <li>KnockoutJS 2: <a href="http://knockoutjs.com">knockoutjs.com</a></li>
+            <li>Open Iconic: <a href="https://useiconic.com/open">useiconic.com/open</a></li>
+            <li>Bootbox 4: <a href="http://bootboxjs.com">bootboxjs.com</a></li>
+        </ul>
+        <h3>Development Tools</h3>
+        The following development tools have been used:
+        <ul>
+            <li>Visual Studio Code</li>
+            <li>TypeScript</li>
+        </ul>
+        <h3>Serverside development</h3>
+        <p>On the Server, Grails and Gorm have been used, just as in the Template. 
+            Java 8 Dates have been used to represent dates. However, Grails does not 
+            yet support Java 8 dates as parameters, therefore they are passed as Strings,
+            which is surely not optimal and could be improved in a future version.
+        </p>
+        <h2>Room for improvement</h2>
+        <p>
+            There are always things that can be improved. In this project the following points were 
+            to be considered:
+        </p>
+        <ul>
+            <li>Reduce bootstrap to just use components required</li>
+            <li>Add times to tasks (not just dates)</li>
+            <li>Do real user handling</li>
+            <li>Export to ICS (if possible)</li>
+            <li>Testing</li>
+        </ul>
+    </body>
+</html>

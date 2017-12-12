@@ -49,13 +49,14 @@ How to start the project: (if other than `grailsw run-app`)
 
 How to test the project:  (if other than `grailsw test-app`)
 
-Project description:      (if other than `/index.html`)
+Project description:      /description.html
 
 External contributions:
 
 Other comments: 
 
 - This application requires a modern browser, IE 11 should work but no older browsers
+- If your browser does not support input type date, you have to enter dates as yyyy-MM-dd (or use another browser ;) ). The tool has been tested with Opera
 - I checkedin both, the TypeScript and the Javascript files. This leads to more changes but makes the build process independent of TypeScript
 
 I'm particular proud of:
