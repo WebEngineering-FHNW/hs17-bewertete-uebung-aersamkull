@@ -1,7 +1,7 @@
 package mvc
 
 /** 
- * A user
+ * A user, currently only has a name, but this could be changed later on
  */
 class User {
 

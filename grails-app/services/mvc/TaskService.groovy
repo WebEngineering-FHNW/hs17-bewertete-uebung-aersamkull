@@ -3,6 +3,9 @@ package mvc
 import grails.transaction.Transactional
 import java.time.LocalDate
 
+/**
+ * Service for more complex task tasks 
+ */
 @Transactional
 class TaskService {
 

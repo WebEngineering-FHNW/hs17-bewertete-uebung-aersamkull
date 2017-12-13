@@ -11,6 +11,9 @@ class TaskMaster extends TaskBase {
 	Rrule rrule;
 	
 	List<User> responsibles
+
+	// As the occurences cannot be persisted, we have to save the deleted occurences, not the 
+	// otherway around
 	static hasMany = [responsibles: User, deletedOccurences: DeletedTask]
 	static mappedBy = [responsibles: "taskMaster"]
 
@@ -24,8 +27,7 @@ class TaskMaster extends TaskBase {
 	}
 	
 	TaskMaster() {
-		type = TaskBase.TYPE_MASTER
-		
+		type = TaskBase.TYPE_MASTER		
 	}
 }
 
@@ -57,6 +59,7 @@ class Rrule {
 	}
 
 	String toString() {
+		// This string should look like ICAL 
 		def endStr = (count != null ? "COUNT=$count;": (until != null ? "UNTIL=$until;" : ""))
 		"FREQ=$freq;INTERVAL=$interval;" + endStr + "START=$start;"
 	}
@@ -67,7 +70,7 @@ class Rrule {
 }
 
 /** 
- * Actually a wrapper around the LocalDate object
+ * Actually a wrapper around the LocalDate object. Is required because of GORM
  */
 class DeletedTask {
 	LocalDate date;
