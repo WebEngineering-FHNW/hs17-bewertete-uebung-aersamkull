@@ -2,6 +2,19 @@
     <head>
         <title>Simple Task System</title>
         <style type="text/css">
+            body {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 800px;
+                margin-top: 10px;
+                margin-bottom: 15px;
+            }
+            @media (max-width: 830px) {
+                body {
+                    margin-left: 10px;
+                    margin-right: 10px;
+                }
+            }
             h1, h2, h3, h4 {
                 font-family: "Segoe UI light", "Roboto light", sans-serif;
             }
@@ -9,6 +22,7 @@
                 font-family: "Segoe UI", "Roboto", sans-serif;
             }
 
+            /* CSS Counters are awesome :) */ 
             h2::before {
                 content: counter(h2count) " ";                
             }
@@ -42,7 +56,7 @@
         <p>
             A task system without users would be meaningless, someone has to do the tasks :)
             In order to not have to implement a whole user handling system, a very simple approach
-            has been chosen: Just enter any username.
+            has been chosen: <em>Just enter any username</em>.
             <br />
             Technically, this has been realized through a simple cookie that stores that username. 
             If the username does not exist yet, a new user is created in the database.
@@ -51,29 +65,29 @@
         <p>There are different types of tasks, each of which has a slightly different meaning.
             In general, a task has a name and a description and a type, which is one of four types:
             <ul>
-                <li> Master</li>
-                <li>Occurence</li>
-                <li>Exception</li>
-                <li>Single</li>
+                <li><a href="#master_task">Master</a></li>
+                <li><a href="#occurence_task">Occurence</a></li>
+                <li><a href="#exception_task">Exception</a></li>
+                <li><a href="#single_task">Single</a></li>
             </ul>
         </p>
         <h3>Task Types</h3>
-        <h4>Master Tasks</h4>
+        <h4 id="master_task">Master Tasks</h4>
         <p>A master task is actually a description of multiple tasks. It describes when these tasks do occur. 
             For example, a master task could be a tasks that describes a congratulation to a birthday, that reoccurs every year.
         </p>
-        <h4>Occurence</h4>
+        <h4 id="occurence_task">Occurence</h4>
         <p> 
             If you have a master task, the instances of this task are called Occurences (or Exceptions, but more on that later).
             As a task master does not have to have an end date, there can be an infinite number of occurences for a task master.
             A typical example would be a single birthday.
         </p>
-        <h4>Exception</h4>
+        <h4 id="exception_task">Exception</h4>
         <p>
             An exception is actually the same as an occurence but something is not as described by the task master.
             For example, you decide for a specific birthday to add some description like: "This year, he gets 50, so let's do a big party"
         </p>
-        <h4>Single Tasks</h4>
+        <h4 id="single_task">Single Tasks</h4>
         <p>
             Well, that is just a simple task that occurs once only, nothing complicated.
         </p>
@@ -113,6 +127,7 @@
         <ul>
             <li>Visual Studio Code</li>
             <li>TypeScript</li>
+            <li>Grails Commandline</li>
         </ul>
         <h3>Serverside development</h3>
         <p>On the Server, Grails and Gorm have been used, just as in the Template. 
@@ -131,6 +146,7 @@
             <li>Do real user handling</li>
             <li>Export to ICS (if possible)</li>
             <li>Testing</li>
+            <li>Error Handling</li>
         </ul>
     </body>
 </html>
