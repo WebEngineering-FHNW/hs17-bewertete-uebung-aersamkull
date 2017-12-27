@@ -71,4 +71,36 @@ I'm particular proud of:
 
 ## Project grading 
 
-< to be filled by lecturer>
+Documentation HTML has some issues when run through the validator. Otherwise nice.
+All functionality seems to work fine.
+
+The functionality includes a small amount of navigation and and extensive amount of user input.
+Validation is done to some extend but e.g. entering an invalid entry as a date produces
+```
+java.time.format.DateTimeParseException
+Caused by
+Text 'xxx' could not be parsed at index 0
+Around line 132 of grails-app/controllers/mvc/TaskController.groovy
+129:			task.responsible = User.get(params.responsible.toInteger()) 
+```
+Nice, interactive UI.
+Otherwise the typical features of a CRUD application (6) plus mobile-friendly design (2).
+
+Commit log is very nice, over a series of days, finishing well before the deadline.
+Tests are missing. 
+HTML validates with warnings.
+Domain classes and Service is nicely documented but TS code only very sparsely.
+Naming is generally ok (beware that a domain class "User" can cause issues in some DBMSs, e.g. Postgres.)
+There is some duplication (e.g. in the views where using templates might have helped) but not overly so.
+There is quite a number of dependencies. Some of them (JQuery, Knockout) make the TS code feel unconventional.
+
+I award 5 extra points for the technical challenge that comes from the SPA approach and the technology mix.
+Since we already hit the ceiling, I do not grade more points for other extras.
+
+
+Congratulations! This is a very good web application.
+You know much more about web technology than what we covered in the lectures.
+On the other hand, we put a lot of effort in working from tests and it is a pity 
+that you chose to ignore this important part of engineering.
+
+6.0
